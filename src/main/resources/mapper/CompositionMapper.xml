@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wust.lesson.study.mapper.CompositionMapper" >
+  <resultMap id="BaseResultMap" type="com.wust.lesson.study.model.Composition" >
+    <id column="tb_id" property="tbId" jdbcType="INTEGER" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="tb_fileUrl" property="tbFileurl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="tb_summary" property="tbSummary" jdbcType="VARCHAR" />
+    <result column="tb_time" property="tbTime" jdbcType="TIMESTAMP" />
+    <result column="tb_title" property="tbTitle" jdbcType="VARCHAR" />
+    <result column="tb_userId" property="tbUserid" jdbcType="INTEGER" />
+    <result column="tb_read" property="tbRead" jdbcType="VARCHAR" />
+    <result column="tb_comment" property="tbComment" jdbcType="VARCHAR" />
+    <result column="tb_collection" property="tbCollection" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wust.lesson.study.model.Composition" extends="BaseResultMap" >
+    <result column="tb_content" property="tbContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    tb_id, delete_flag, tb_fileUrl, remark, tb_summary, tb_time, tb_title, tb_userId, 
+    tb_read, tb_comment, tb_collection
+  </sql>
+  <sql id="Blob_Column_List" >
+    tb_content
+  </sql>
+
+  <select id="searchByTitle" resultMap="BaseResultMap" parameterType="java.lang.System">
+    select * from tb_composition where tb_title like "%"#{tbTitle,jdbcType=VARCHAR}"%"
+  </select>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wust.lesson.study.model.CompositionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_composition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wust.lesson.study.model.CompositionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_composition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_composition
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_composition
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wust.lesson.study.model.CompositionExample" >
+    delete from tb_composition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wust.lesson.study.model.Composition" >
+    insert into tb_composition (tb_id, delete_flag, tb_fileUrl, 
+      remark, tb_summary, tb_time, 
+      tb_title, tb_userId, tb_read, 
+      tb_comment, tb_collection, tb_content
+      )
+    values (#{tbId,jdbcType=INTEGER}, #{deleteFlag,jdbcType=INTEGER}, #{tbFileurl,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{tbSummary,jdbcType=VARCHAR}, #{tbTime,jdbcType=TIMESTAMP}, 
+      #{tbTitle,jdbcType=VARCHAR}, #{tbUserid,jdbcType=INTEGER}, #{tbRead,jdbcType=VARCHAR}, 
+      #{tbComment,jdbcType=VARCHAR}, #{tbCollection,jdbcType=VARCHAR}, #{tbContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wust.lesson.study.model.Composition" >
+    insert into tb_composition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tbId != null" >
+        tb_id,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="tbFileurl != null" >
+        tb_fileUrl,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="tbSummary != null" >
+        tb_summary,
+      </if>
+      <if test="tbTime != null" >
+        tb_time,
+      </if>
+      <if test="tbTitle != null" >
+        tb_title,
+      </if>
+      <if test="tbUserid != null" >
+        tb_userId,
+      </if>
+      <if test="tbRead != null" >
+        tb_read,
+      </if>
+      <if test="tbComment != null" >
+        tb_comment,
+      </if>
+      <if test="tbCollection != null" >
+        tb_collection,
+      </if>
+      <if test="tbContent != null" >
+        tb_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tbId != null" >
+        #{tbId,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="tbFileurl != null" >
+        #{tbFileurl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="tbSummary != null" >
+        #{tbSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="tbTime != null" >
+        #{tbTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbTitle != null" >
+        #{tbTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="tbUserid != null" >
+        #{tbUserid,jdbcType=INTEGER},
+      </if>
+      <if test="tbRead != null" >
+        #{tbRead,jdbcType=VARCHAR},
+      </if>
+      <if test="tbComment != null" >
+        #{tbComment,jdbcType=VARCHAR},
+      </if>
+      <if test="tbCollection != null" >
+        #{tbCollection,jdbcType=VARCHAR},
+      </if>
+      <if test="tbContent != null" >
+        #{tbContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wust.lesson.study.model.CompositionExample" resultType="java.lang.Integer" >
+    select count(*) from tb_composition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_composition
+    <set >
+      <if test="record.tbId != null" >
+        tb_id = #{record.tbId,jdbcType=INTEGER},
+      </if>
+      <if test="record.deleteFlag != null" >
+        delete_flag = #{record.deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.tbFileurl != null" >
+        tb_fileUrl = #{record.tbFileurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbSummary != null" >
+        tb_summary = #{record.tbSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbTime != null" >
+        tb_time = #{record.tbTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tbTitle != null" >
+        tb_title = #{record.tbTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbUserid != null" >
+        tb_userId = #{record.tbUserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tbRead != null" >
+        tb_read = #{record.tbRead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbComment != null" >
+        tb_comment = #{record.tbComment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbCollection != null" >
+        tb_collection = #{record.tbCollection,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tbContent != null" >
+        tb_content = #{record.tbContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update tb_composition
+    set tb_id = #{record.tbId,jdbcType=INTEGER},
+      delete_flag = #{record.deleteFlag,jdbcType=INTEGER},
+      tb_fileUrl = #{record.tbFileurl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      tb_summary = #{record.tbSummary,jdbcType=VARCHAR},
+      tb_time = #{record.tbTime,jdbcType=TIMESTAMP},
+      tb_title = #{record.tbTitle,jdbcType=VARCHAR},
+      tb_userId = #{record.tbUserid,jdbcType=INTEGER},
+      tb_read = #{record.tbRead,jdbcType=VARCHAR},
+      tb_comment = #{record.tbComment,jdbcType=VARCHAR},
+      tb_collection = #{record.tbCollection,jdbcType=VARCHAR},
+      tb_content = #{record.tbContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_composition
+    set tb_id = #{record.tbId,jdbcType=INTEGER},
+      delete_flag = #{record.deleteFlag,jdbcType=INTEGER},
+      tb_fileUrl = #{record.tbFileurl,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      tb_summary = #{record.tbSummary,jdbcType=VARCHAR},
+      tb_time = #{record.tbTime,jdbcType=TIMESTAMP},
+      tb_title = #{record.tbTitle,jdbcType=VARCHAR},
+      tb_userId = #{record.tbUserid,jdbcType=INTEGER},
+      tb_read = #{record.tbRead,jdbcType=VARCHAR},
+      tb_comment = #{record.tbComment,jdbcType=VARCHAR},
+      tb_collection = #{record.tbCollection,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wust.lesson.study.model.Composition" >
+    update tb_composition
+    <set >
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="tbFileurl != null" >
+        tb_fileUrl = #{tbFileurl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="tbSummary != null" >
+        tb_summary = #{tbSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="tbTime != null" >
+        tb_time = #{tbTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbTitle != null" >
+        tb_title = #{tbTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="tbUserid != null" >
+        tb_userId = #{tbUserid,jdbcType=INTEGER},
+      </if>
+      <if test="tbRead != null" >
+        tb_read = #{tbRead,jdbcType=VARCHAR},
+      </if>
+      <if test="tbComment != null" >
+        tb_comment = #{tbComment,jdbcType=VARCHAR},
+      </if>
+      <if test="tbCollection != null" >
+        tb_collection = #{tbCollection,jdbcType=VARCHAR},
+      </if>
+      <if test="tbContent != null" >
+        tb_content = #{tbContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wust.lesson.study.model.Composition" >
+    update tb_composition
+    set delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      tb_fileUrl = #{tbFileurl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      tb_summary = #{tbSummary,jdbcType=VARCHAR},
+      tb_time = #{tbTime,jdbcType=TIMESTAMP},
+      tb_title = #{tbTitle,jdbcType=VARCHAR},
+      tb_userId = #{tbUserid,jdbcType=INTEGER},
+      tb_read = #{tbRead,jdbcType=VARCHAR},
+      tb_comment = #{tbComment,jdbcType=VARCHAR},
+      tb_collection = #{tbCollection,jdbcType=VARCHAR},
+      tb_content = #{tbContent,jdbcType=LONGVARCHAR}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wust.lesson.study.model.Composition" >
+    update tb_composition
+    set delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      tb_fileUrl = #{tbFileurl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      tb_summary = #{tbSummary,jdbcType=VARCHAR},
+      tb_time = #{tbTime,jdbcType=TIMESTAMP},
+      tb_title = #{tbTitle,jdbcType=VARCHAR},
+      tb_userId = #{tbUserid,jdbcType=INTEGER},
+      tb_read = #{tbRead,jdbcType=VARCHAR},
+      tb_comment = #{tbComment,jdbcType=VARCHAR},
+      tb_collection = #{tbCollection,jdbcType=VARCHAR}
+    where tb_id = #{tbId,jdbcType=INTEGER}
+  </update>
+</mapper>

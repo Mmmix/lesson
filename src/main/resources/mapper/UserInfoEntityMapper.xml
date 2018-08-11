@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wust.lesson.study.mapper.UserInfoEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.wust.lesson.study.model.UserInfoEntity" >
+    <id column="td_id" property="tdId" jdbcType="INTEGER" />
+    <result column="td_name" property="tdName" jdbcType="VARCHAR" />
+    <result column="td_sex" property="tdSex" jdbcType="VARCHAR" />
+    <result column="td_age" property="tdAge" jdbcType="VARCHAR" />
+    <result column="td_role" property="tdRole" jdbcType="VARCHAR" />
+    <result column="td_account" property="tdAccount" jdbcType="VARCHAR" />
+    <result column="td_email" property="tdEmail" jdbcType="VARCHAR" />
+    <result column="td_img" property="tdImg" jdbcType="VARCHAR" />
+    <result column="td_password" property="tdPassword" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    td_id, td_name, td_sex, td_age, td_role, td_account, td_email, td_img, td_password
+  </sql>
+  <select id="searchUser" resultMap="BaseResultMap" parameterType="java.lang.System">
+    select * from userinfo where td_name like "%"#{tdName,jdbcType=VARCHAR}"%"
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wust.lesson.study.model.UserInfoEntityExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userinfo
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userinfo
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wust.lesson.study.model.UserInfoEntityExample" >
+    delete from userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wust.lesson.study.model.UserInfoEntity" >
+    insert into userinfo (td_name, td_sex,
+      td_age, td_role, td_account, 
+      td_email, td_img, td_password
+      )
+    values (#{tdName,jdbcType=VARCHAR}, #{tdSex,jdbcType=VARCHAR},
+      #{tdAge,jdbcType=VARCHAR}, #{tdRole,jdbcType=VARCHAR}, #{tdAccount,jdbcType=VARCHAR}, 
+      #{tdEmail,jdbcType=VARCHAR}, #{tdImg,jdbcType=VARCHAR}, #{tdPassword,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wust.lesson.study.model.UserInfoEntity" >
+    insert into userinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tdName != null" >
+        td_name,
+      </if>
+      <if test="tdSex != null" >
+        td_sex,
+      </if>
+      <if test="tdAge != null" >
+        td_age,
+      </if>
+      <if test="tdRole != null" >
+        td_role,
+      </if>
+      <if test="tdAccount != null" >
+        td_account,
+      </if>
+      <if test="tdEmail != null" >
+        td_email,
+      </if>
+      <if test="tdImg != null" >
+        td_img,
+      </if>
+      <if test="tdPassword != null" >
+        td_password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tdId != null" >
+        #{tdId,jdbcType=INTEGER},
+      </if>
+      <if test="tdName != null" >
+        #{tdName,jdbcType=VARCHAR},
+      </if>
+      <if test="tdSex != null" >
+        #{tdSex,jdbcType=VARCHAR},
+      </if>
+      <if test="tdAge != null" >
+        #{tdAge,jdbcType=VARCHAR},
+      </if>
+      <if test="tdRole != null" >
+        #{tdRole,jdbcType=VARCHAR},
+      </if>
+      <if test="tdAccount != null" >
+        #{tdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="tdEmail != null" >
+        #{tdEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tdImg != null" >
+        #{tdImg,jdbcType=VARCHAR},
+      </if>
+      <if test="tdPassword != null" >
+        #{tdPassword,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wust.lesson.study.model.UserInfoEntityExample" resultType="java.lang.Integer" >
+    select count(*) from userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update userinfo
+    <set >
+      <if test="record.tdId != null" >
+        td_id = #{record.tdId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tdName != null" >
+        td_name = #{record.tdName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdSex != null" >
+        td_sex = #{record.tdSex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdAge != null" >
+        td_age = #{record.tdAge,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdRole != null" >
+        td_role = #{record.tdRole,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdAccount != null" >
+        td_account = #{record.tdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdEmail != null" >
+        td_email = #{record.tdEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdImg != null" >
+        td_img = #{record.tdImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdPassword != null" >
+        td_password = #{record.tdPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update userinfo
+    set td_id = #{record.tdId,jdbcType=INTEGER},
+      td_name = #{record.tdName,jdbcType=VARCHAR},
+      td_sex = #{record.tdSex,jdbcType=VARCHAR},
+      td_age = #{record.tdAge,jdbcType=VARCHAR},
+      td_role = #{record.tdRole,jdbcType=VARCHAR},
+      td_account = #{record.tdAccount,jdbcType=VARCHAR},
+      td_email = #{record.tdEmail,jdbcType=VARCHAR},
+      td_img = #{record.tdImg,jdbcType=VARCHAR},
+      td_password = #{record.tdPassword,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wust.lesson.study.model.UserInfoEntity" >
+    update userinfo
+    <set >
+      <if test="tdName != null" >
+        td_name = #{tdName,jdbcType=VARCHAR},
+      </if>
+      <if test="tdSex != null" >
+        td_sex = #{tdSex,jdbcType=VARCHAR},
+      </if>
+      <if test="tdAge != null" >
+        td_age = #{tdAge,jdbcType=VARCHAR},
+      </if>
+      <if test="tdRole != null" >
+        td_role = #{tdRole,jdbcType=VARCHAR},
+      </if>
+      <if test="tdAccount != null" >
+        td_account = #{tdAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="tdEmail != null" >
+        td_email = #{tdEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tdImg != null" >
+        td_img = #{tdImg,jdbcType=VARCHAR},
+      </if>
+      <if test="tdPassword != null" >
+        td_password = #{tdPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wust.lesson.study.model.UserInfoEntity" >
+    update userinfo
+    set td_name = #{tdName,jdbcType=VARCHAR},
+      td_sex = #{tdSex,jdbcType=VARCHAR},
+      td_age = #{tdAge,jdbcType=VARCHAR},
+      td_role = #{tdRole,jdbcType=VARCHAR},
+      td_account = #{tdAccount,jdbcType=VARCHAR},
+      td_email = #{tdEmail,jdbcType=VARCHAR},
+      td_img = #{tdImg,jdbcType=VARCHAR},
+      td_password = #{tdPassword,jdbcType=VARCHAR}
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </update>
+</mapper>

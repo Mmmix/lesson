@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wust.lesson.study.mapper.TbMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.wust.lesson.study.model.TbMessage" >
+    <id column="td_id" property="tdId" jdbcType="INTEGER" />
+    <result column="td_addressId" property="tdAddressid" jdbcType="INTEGER" />
+    <result column="td_content" property="tdContent" jdbcType="VARCHAR" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="td_senderId" property="tdSenderid" jdbcType="INTEGER" />
+    <result column="time" property="time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ReturnMessage" type="com.wust.lesson.study.return_modal.returnMessage">
+    <id column="td_id" property="tdId" jdbcType="INTEGER"/>
+    <result column="td_addressId" property="tdAddressid" jdbcType="INTEGER"/>
+    <result column="td_senderId" property="tdSenderid" jdbcType="INTEGER"/>
+    <result column="td_content" property="tdContent" jdbcType="VARCHAR"/>
+    <result column="td_name" property="tdName" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="selectSender" resultMap="ReturnMessage">
+    SELECT
+      tb_message.td_id,
+      tb_message.td_addressId,
+      tb_message.td_senderId,
+      tb_message.td_content,
+      userinfo.td_name
+    FROM
+      tb_message,
+      userinfo
+    WHERE
+      userinfo.td_id = ANY ( SELECT tb_message.td_senderId FROM tb_message, userinfo WHERE userinfo.td_id = #{userId} AND userinfo.td_id = tb_message.td_addressId )
+      AND tb_message.td_senderId = userinfo.td_id AND tb_message.td_addressId=#{userId};
+  </select>
+  <select id="selectAddress" resultMap="ReturnMessage">
+    SELECT
+      tb_message.td_id,
+      tb_message.td_addressId,
+      tb_message.td_senderId,
+      tb_message.td_content,
+      userinfo.td_name
+    FROM
+      tb_message,
+      userinfo
+    WHERE
+      userinfo.td_id = ANY ( SELECT tb_message.td_addressId FROM tb_message, userinfo WHERE userinfo.td_id = #{userId} AND userinfo.td_id = tb_message.td_senderId )
+      AND tb_message.td_addressId = userinfo.td_id AND tb_message.td_senderId=#{userId};
+  </select>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    td_id, td_addressId, td_content, delete_flag, remark, td_senderId, time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wust.lesson.study.model.TbMessageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_message
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_message
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wust.lesson.study.model.TbMessageExample" >
+    delete from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wust.lesson.study.model.TbMessage" >
+    insert into tb_message (td_id, td_addressId, td_content, 
+      delete_flag, remark, td_senderId, 
+      time)
+    values (#{tdId,jdbcType=INTEGER}, #{tdAddressid,jdbcType=INTEGER}, #{tdContent,jdbcType=VARCHAR}, 
+      #{deleteFlag,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{tdSenderid,jdbcType=INTEGER}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wust.lesson.study.model.TbMessage" >
+    insert into tb_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tdId != null" >
+        td_id,
+      </if>
+      <if test="tdAddressid != null" >
+        td_addressId,
+      </if>
+      <if test="tdContent != null" >
+        td_content,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="tdSenderid != null" >
+        td_senderId,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tdId != null" >
+        #{tdId,jdbcType=INTEGER},
+      </if>
+      <if test="tdAddressid != null" >
+        #{tdAddressid,jdbcType=INTEGER},
+      </if>
+      <if test="tdContent != null" >
+        #{tdContent,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="tdSenderid != null" >
+        #{tdSenderid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wust.lesson.study.model.TbMessageExample" resultType="java.lang.Integer" >
+    select count(*) from tb_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_message
+    <set >
+      <if test="record.tdId != null" >
+        td_id = #{record.tdId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tdAddressid != null" >
+        td_addressId = #{record.tdAddressid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tdContent != null" >
+        td_content = #{record.tdContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteFlag != null" >
+        delete_flag = #{record.deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tdSenderid != null" >
+        td_senderId = #{record.tdSenderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.time != null" >
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_message
+    set td_id = #{record.tdId,jdbcType=INTEGER},
+      td_addressId = #{record.tdAddressid,jdbcType=INTEGER},
+      td_content = #{record.tdContent,jdbcType=VARCHAR},
+      delete_flag = #{record.deleteFlag,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      td_senderId = #{record.tdSenderid,jdbcType=INTEGER},
+      time = #{record.time,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wust.lesson.study.model.TbMessage" >
+    update tb_message
+    <set >
+      <if test="tdAddressid != null" >
+        td_addressId = #{tdAddressid,jdbcType=INTEGER},
+      </if>
+      <if test="tdContent != null" >
+        td_content = #{tdContent,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="tdSenderid != null" >
+        td_senderId = #{tdSenderid,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wust.lesson.study.model.TbMessage" >
+    update tb_message
+    set td_addressId = #{tdAddressid,jdbcType=INTEGER},
+      td_content = #{tdContent,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      td_senderId = #{tdSenderid,jdbcType=INTEGER},
+      time = #{time,jdbcType=TIMESTAMP}
+    where td_id = #{tdId,jdbcType=INTEGER}
+  </update>
+</mapper>
